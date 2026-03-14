@@ -1,0 +1,13 @@
+# docker-compose.yml
+
+services:
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik
+    ports:
+      - "80:80"     # HTTP 流量
+      - "8080:8080" # Dashboard
+    volumes:
+      - ./traefik.yml:/home/billshin/docker/api-monitor/traefik/traefik.yml:ro
+      - ./dynamic.yml:/home/billshin/docker/api-monitor/traefik/dynamic.yml:ro
+    restart: always

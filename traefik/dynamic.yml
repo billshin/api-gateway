@@ -1,0 +1,25 @@
+# dynamic.yml (動態配置)
+http:
+  routers:
+    api-billub:
+      entryPoints:
+        - web
+      rule: "Host(`bill-ub`) && PathPrefix(`/api`)"  # 請求 Host
+      service: api-billub
+
+    api-billub2:
+      entryPoints:
+        - web
+      rule: "Host(`bill-ub`) && PathPrefix(`/api2`)"  # 請求 Host
+      service: api-billub
+
+
+  services:
+    api-billub:
+      loadBalancer:
+        servers:
+          - url: "http://172.17.0.1:9001"  # 外部 API
+          - url: "http://172.17.0.1:9002"  # 外部 API
+        passHostHeader: true   # ✅ 保留原 Host header
+        sticky: false          # 選擇是否啟用黏性會話
+

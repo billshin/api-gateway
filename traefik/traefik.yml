@@ -1,0 +1,20 @@
+# traefik.yml (靜態配置)
+api:
+  dashboard: true
+  insecure: true
+  
+entryPoints:
+  web:
+    address: ":80"
+  metrics:
+    address: ":9100"
+
+providers:
+  file:
+    filename: "/etc/traefik/dynamic.yml"
+    watch: true  # ✅ 檔案修改後自動重新讀取
+
+metrics:
+  prometheus:
+    entryPoint: metrics  # 務必對應上面定義的 entryPoint 名稱
+    addRoutersLabels: true

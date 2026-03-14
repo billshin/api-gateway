@@ -1,0 +1,12 @@
+services:
+  whoami-1:
+    image: traefik/whoami
+    hostname: whoami-1
+    ports:
+      - "9001:80"
+      
+  whoami-2:
+    image: traefik/whoami
+    hostname: whoami-1
+    ports:
+      - "9002:80"

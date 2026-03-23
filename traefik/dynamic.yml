@@ -5,6 +5,8 @@ http:
       entryPoints:
         - web
       rule: "Host(`bill-ub`) && PathPrefix(`/api`)"  # 請求 Host
+      middlewares:
+        - global-rate-limit  # 流量限制中介軟體
       service: api-billub
 
     api-billub2:
@@ -13,6 +15,15 @@ http:
       rule: "Host(`bill-ub`) && PathPrefix(`/api2`)"  # 請求 Host
       service: api-billub
 
+  middlewares:
+    # 第一關：流量限制
+    global-rate-limit:
+      rateLimit:
+        average: 5      # 每秒平均 5 個請求
+        burst: 10       # 允許瞬間 10 個請求的爆發
+        sourceCriterion:
+          ipStrategy:
+            depth: 2    # 如果 depth: 2：Traefik 會去讀取 Header 中的 X-Forwarded-For 列表，並從右往左數第 2 個。這樣就能抓到 [真實用戶 IP]，精準打擊壞蛋。
 
   services:
     api-billub:
